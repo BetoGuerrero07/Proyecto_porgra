@@ -21,11 +21,6 @@ public class Parqueo {
      */
     public Parqueo(int filas, int columnas) {
         mapa = new boolean[filas][columnas];
-        for (boolean[] fila : mapa) {
-            for (boolean area : fila) {
-                area = false;
-            }
-        }
 
     }
 
@@ -64,6 +59,16 @@ public class Parqueo {
             System.out.println();
         }
     }
+    
+    public void aparcar(Vehiculo vehiculo){
+        int[] valorTicket = vehiculo.getNumTicket();
+        vehiculo.setEstaEstacionado(true);
+        
+        mapa[valorTicket[0]][valorTicket[1]]= true;
+        
+        
+    }
+    
     
     
 
