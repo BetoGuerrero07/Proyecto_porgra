@@ -16,6 +16,8 @@ public class Ticket {
     private int columna;
     private int horaEntrada;
     private int minutoEntrada;
+    private int horaSalida;
+    private int minutoSalida;
     private Vehiculo vehiculo;
 
     public Ticket(int fila, int columna, int horaEntrada, int minutoEntrada, Vehiculo vehiculo) {
@@ -24,8 +26,24 @@ public class Ticket {
         this.horaEntrada = horaEntrada;
         this.minutoEntrada = minutoEntrada;
         this.vehiculo = vehiculo;
+        
+        this.horaSalida = -1;
+        this.minutoSalida = -1;
     }
 
+    public void marcarSalida(int hora, int minuto) {
+        this.horaSalida = hora;
+        this.minutoSalida = minuto;
+        vehiculo.setEstaEstacionado(false);
+    }
+    // Calcular minutos total estacionado
+    public int calcularTiempoEstacionado() {
+        if (horaSalida == -1 || minutoSalida == -1) {
+            return -1; // Aún no salió
+        }
+        return (horaSalida * 60 + minutoSalida) - (horaEntrada * 60 + minutoEntrada);
+    }
+    // Getters
     public int getFila() {
         return fila;
     }
@@ -45,9 +63,7 @@ public class Ticket {
     public Vehiculo getVehiculo() {
         return vehiculo;
     }
+
     
-    public int calcularTiempoEstacionado(int horaSalida, int minutoSalida) {
-        return (horaSalida * 60 + minutoSalida) - (horaEntrada * 60 + minutoEntrada);
-    }
 
 }

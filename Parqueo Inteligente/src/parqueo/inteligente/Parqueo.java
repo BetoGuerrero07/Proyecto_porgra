@@ -30,7 +30,7 @@ public class Parqueo {
      * @param mapa
      * @return
      */
-    public boolean ParqueoLleno(boolean[][] mapa) {
+    public boolean ParqueoLleno() {
         for (boolean[] fila : mapa) {
             for (boolean area : fila) {
                 if (area == false) {
@@ -41,66 +41,74 @@ public class Parqueo {
         return true;
     }
 
-    public void ImprimirParqueo(boolean[][] mapa) {
-    for (boolean[] fila : mapa) {
+    //recibe atributo privado "mapa"
+    public void ImprimirParqueo() {
+        for (boolean[] fila : mapa) {
 
-        // Línea superior de cada casilla
-        for (boolean area : fila) {
-            System.out.printf("%2c%2c%2c ", '-', '-', '-');
-        }
-        System.out.println();
-
-        // Línea del medio
-        for (boolean area : fila) {
-            if (area) {
-                System.out.printf("%2c%2c%2c ", '|', '#', '|');
-            } else {
-                System.out.printf("%2c%2c%2c ", '|', ' ', '|');
+            // Línea superior de cada casilla
+            for (boolean area : fila) {
+                System.out.printf("%2c%2c%2c ", '-', '-', '-');
             }
-        }
-        System.out.println();
+            System.out.println();
 
-        // Línea inferior
-        for (boolean area : fila) {
-            System.out.printf("%2c%2c%2c ", '-', '-', '-');
+            // Línea del medio
+            for (boolean area : fila) {
+                if (area) {
+                    System.out.printf("%2c%2c%2c ", '|', '#', '|');
+                } else {
+                    System.out.printf("%2c%2c%2c ", '|', ' ', '|');
+                }
+            }
+            System.out.println();
+
+            // Línea inferior
+            for (boolean area : fila) {
+                System.out.printf("%2c%2c%2c ", '-', '-', '-');
+            }
+            System.out.println();   // terminar la fila completa
+            System.out.println();   // espacio entre filas
         }
-        System.out.println();   // terminar la fila completa
-        System.out.println();   // espacio entre filas
     }
-}
-    
-    public void Aparcar(Vehiculo vehiculo){
-        int[] valorTicket = vehiculo.getNumTicket();
-        vehiculo.setEstaEstacionado(true);
-        
-        mapa[valorTicket[0]][valorTicket[1]]= true;
-        
-        
-    }
-    
-    public void Retirar(int fila, int columna){
+
+    public void Retirar(Ticket ticket, int horaSalida, int minutoSalida) {
+        int fila = ticket.getFila();
+        int columna = ticket.getColumna();
+
         if (mapa[fila][columna]) {
-            System.out.println("espacio no esta disponible");
-        }else{
-            mapa[fila][columna]= false;
+            System.out.println("Error: el espacio no esta disponible");
         }
         
+        mapa[fila][columna] = false;
+        ticket.marcarSalida(horaSalida, minutoSalida);
+        System.out.println("Tiempo estacionado: " + ticket.calcularTiempoEstacionado() + " minutos");
     }
-    
-    public int EspaciosDisponibles(){
+
+    public int EspaciosDisponibles() {
         int contadorEspacios = 0;
-        for (boolean[] filas: mapa) {
-            for (boolean area:filas) {
+        for (boolean[] filas : mapa) {
+            for (boolean area : filas) {
                 if (!area) {
-                    contadorEspacios+= 1;
+                    contadorEspacios += 1;
                 }
             }
         }
         return contadorEspacios;
-        
+
     }
-    
-    
-    
+
+    public Ticket Aparcar(Vehiculo vehiculo, int fila, int columna, int hora, int minuto) {
+        if (fila < 0 || fila >= mapa.length || columna < 0 || columna >= mapa[0].length) {
+            System.out.println("Posición inválida");
+            return null;
+        }
+        if (mapa[fila][columna]) {
+            System.out.println("Espacio ocupado, elija otro");
+            return null;
+        }
+
+        mapa[fila][columna] = true;
+        vehiculo.setEstaEstacionado(true);
+        return new Ticket(fila, columna, hora, minuto, vehiculo);
+    }
 
 }
