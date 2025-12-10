@@ -30,7 +30,7 @@ public class Parqueo {
      * @param mapa
      * @return
      */
-    public static boolean parqueoLleno(boolean[][] mapa) {
+    public boolean ParqueoLleno(boolean[][] mapa) {
         for (boolean[] fila : mapa) {
             for (boolean area : fila) {
                 if (area == false) {
@@ -41,31 +41,62 @@ public class Parqueo {
         return true;
     }
 
-    public static void imprimirParqueo(boolean[][] mapa) {
-        for (boolean[] fila : mapa) {
-            for (boolean area : fila) {
-                if (area) {
-                    System.out.printf("%2c%2c%2c%n",'-','-','-');
-                    System.out.printf("%2c%2c%2c%n",'|','#','|');
-                    System.out.printf("%2c%2c%2c%n",'-','-','-');
-                    
-                }else{
-                    System.out.printf("%2c%2c%2c%n",'-','-','-');
-                    System.out.printf("%2c%2c%2c%n",'|',' ','|');
-                    System.out.printf("%2c%2c%2c%n",'-','-','-');
-                }
-                
-            }
-            System.out.println();
+    public void ImprimirParqueo(boolean[][] mapa) {
+    for (boolean[] fila : mapa) {
+
+        // Línea superior de cada casilla
+        for (boolean area : fila) {
+            System.out.printf("%2c%2c%2c ", '-', '-', '-');
         }
+        System.out.println();
+
+        // Línea del medio
+        for (boolean area : fila) {
+            if (area) {
+                System.out.printf("%2c%2c%2c ", '|', '#', '|');
+            } else {
+                System.out.printf("%2c%2c%2c ", '|', ' ', '|');
+            }
+        }
+        System.out.println();
+
+        // Línea inferior
+        for (boolean area : fila) {
+            System.out.printf("%2c%2c%2c ", '-', '-', '-');
+        }
+        System.out.println();   // terminar la fila completa
+        System.out.println();   // espacio entre filas
     }
+}
     
-    public void aparcar(Vehiculo vehiculo){
+    public void Aparcar(Vehiculo vehiculo){
         int[] valorTicket = vehiculo.getNumTicket();
         vehiculo.setEstaEstacionado(true);
         
         mapa[valorTicket[0]][valorTicket[1]]= true;
         
+        
+    }
+    
+    public void Retirar(int fila, int columna){
+        if (mapa[fila][columna]) {
+            System.out.println("espacio no esta disponible");
+        }else{
+            mapa[fila][columna]= false;
+        }
+        
+    }
+    
+    public int EspaciosDisponibles(){
+        int contadorEspacios = 0;
+        for (boolean[] filas: mapa) {
+            for (boolean area:filas) {
+                if (!area) {
+                    contadorEspacios+= 1;
+                }
+            }
+        }
+        return contadorEspacios;
         
     }
     
