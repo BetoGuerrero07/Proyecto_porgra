@@ -8,7 +8,7 @@ package parqueo.inteligente;
  *
  * @author euced
  */
-public class ParqueoInteligente {
+public class MenuPrincipal {
 
     /**
      * @param args the command line arguments
