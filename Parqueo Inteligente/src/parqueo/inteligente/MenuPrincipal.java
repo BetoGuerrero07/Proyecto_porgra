@@ -22,9 +22,9 @@ public class MenuPrincipal {
         Random rnd = new Random();
 
         System.out.println("Bienvenido al Parqueo Inteligente");
-        System.out.print("Ingrese número de filas: ");
+        System.out.print("Ingrese numero de filas: ");
         int filas = sc.nextInt();
-        System.out.print("Ingrese número de columnas: ");
+        System.out.print("Ingrese numero de columnas: ");
         int columnas = sc.nextInt();
 
         Parqueo parqueo = new Parqueo(filas, columnas);
