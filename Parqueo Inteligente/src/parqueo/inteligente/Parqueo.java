@@ -43,6 +43,7 @@ public class Parqueo {
 
     //recibe atributo privado "mapa"
     public void ImprimirParqueo() {
+        System.out.println("\n#: Espacio cupado por vehiculo\n");
         for (boolean[] fila : mapa) {
 
             // Línea superior de cada casilla
@@ -74,8 +75,9 @@ public class Parqueo {
         int fila = ticket.getFila();
         int columna = ticket.getColumna();
 
-        if (mapa[fila][columna]) {
+        if (!mapa[fila][columna]) {
             System.out.println("Error: el espacio no esta disponible");
+            return;
         }
         
         mapa[fila][columna] = false;
@@ -98,7 +100,7 @@ public class Parqueo {
 
     public Ticket Aparcar(Vehiculo vehiculo, int fila, int columna, int hora, int minuto) {
         if (fila < 0 || fila >= mapa.length || columna < 0 || columna >= mapa[0].length) {
-            System.out.println("Posición inválida");
+            System.out.println("Posicion invalida");
             return null;
         }
         if (mapa[fila][columna]) {

@@ -19,8 +19,10 @@ public class Ticket {
     private int horaSalida;
     private int minutoSalida;
     private Vehiculo vehiculo;
+    private int idTicket;
 
     public Ticket(int fila, int columna, int horaEntrada, int minutoEntrada, Vehiculo vehiculo) {
+        Random rnd = new Random();
         this.fila = fila;
         this.columna = columna;
         this.horaEntrada = horaEntrada;
@@ -29,6 +31,7 @@ public class Ticket {
         
         this.horaSalida = -1;
         this.minutoSalida = -1;
+        this.idTicket = rnd.nextInt(100000);
     }
 
     public void marcarSalida(int hora, int minuto) {
@@ -62,6 +65,10 @@ public class Ticket {
 
     public Vehiculo getVehiculo() {
         return vehiculo;
+    }
+
+    public int getIdTicket() {
+        return idTicket;
     }
 
     
