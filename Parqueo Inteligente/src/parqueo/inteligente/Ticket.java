@@ -1,13 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package parqueo.inteligente;
 
 import java.util.Random;
 
 /**
- *
+ * Representa un ticket generado al estacionar un vehículo.
+ * Contiene información de ubicacion (fila y columna), hora de entrada y salida, y el vehículo.
+ * Genera un ID aleatorio único.
+ * 
  * @author euced
  */
 public class Ticket {
@@ -21,6 +20,15 @@ public class Ticket {
     private Vehiculo vehiculo;
     private int idTicket;
 
+    /**
+     * Constructor del ticket.
+     * 
+     * @param fila Fila donde se estaciona el vehiculo.
+     * @param columna Columna donde se estaciona el vehiculo.
+     * @param horaEntrada Hora de entrada del vehiculo.
+     * @param minutoEntrada Minuto de entrada del vehiculo.
+     * @param vehiculo Vehiculo asociado al ticket.
+     */
     public Ticket(int fila, int columna, int horaEntrada, int minutoEntrada, Vehiculo vehiculo) {
         Random rnd = new Random();
         this.fila = fila;
@@ -28,49 +36,48 @@ public class Ticket {
         this.horaEntrada = horaEntrada;
         this.minutoEntrada = minutoEntrada;
         this.vehiculo = vehiculo;
-        
         this.horaSalida = -1;
         this.minutoSalida = -1;
         this.idTicket = rnd.nextInt(100000);
     }
 
+    /**
+     * Marca la salida del vehículo.
+     * 
+     * @param hora Hora de salida.
+     * @param minuto Minuto de salida.
+     */
     public void marcarSalida(int hora, int minuto) {
         this.horaSalida = hora;
         this.minutoSalida = minuto;
         vehiculo.setEstaEstacionado(false);
     }
-    // Calcular minutos total estacionado
+
+    /**
+     * Calcula el tiempo total estacionado en minutos.
+     * 
+     * @return Tiempo estacionado en minutos, -1 si no ha salido.
+     */
     public int calcularTiempoEstacionado() {
-        if (horaSalida == -1 || minutoSalida == -1) {
-            return -1; // Aún no salió
-        }
+        if (horaSalida == -1 || minutoSalida == -1) return -1;
         return (horaSalida * 60 + minutoSalida) - (horaEntrada * 60 + minutoEntrada);
     }
-    // Getters
-    public int getFila() {
-        return fila;
-    }
 
-    public int getColumna() {
-        return columna;
-    }
+    /** @return Fila donde esta estacionado el vehiculo */
+    public int getFila() { return fila; }
 
-    public int getHoraEntrada() {
-        return horaEntrada;
-    }
+    /** @return Columna donde esta estacionado el vehiculo */
+    public int getColumna() { return columna; }
 
-    public int getMinutoEntrada() {
-        return minutoEntrada;
-    }
+    /** @return Hora de entrada */
+    public int getHoraEntrada() { return horaEntrada; }
 
-    public Vehiculo getVehiculo() {
-        return vehiculo;
-    }
+    /** @return Minuto de entrada */
+    public int getMinutoEntrada() { return minutoEntrada; }
 
-    public int getIdTicket() {
-        return idTicket;
-    }
+    /** @return Vehiculo enlazado al ticket */
+    public Vehiculo getVehiculo() { return vehiculo; }
 
-    
-
+    /** @return ID del ticket */
+    public int getIdTicket() { return idTicket; }
 }

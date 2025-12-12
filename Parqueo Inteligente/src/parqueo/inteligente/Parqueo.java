@@ -1,11 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package parqueo.inteligente;
 
 /**
- *
+ * Representa un parqueo con espacios disponibles para vehiculos.
+ * Cada espacio se representa como un valor booleano: true ocupado, false libre.
+ * 
  * @author euced
  */
 public class Parqueo {
@@ -13,27 +11,24 @@ public class Parqueo {
     private boolean[][] mapa;
 
     /**
-     * Constructor de clase Parqueo Genera automaticamente un mapa tipo booleano
-     * vacio
-     *
-     * @param filas
-     * @param columnas
+     * Constructor de Parqueo.
+     * 
+     * @param filas Cantidad de filas del parqueo.
+     * @param columnas Cantidad de columnas del parqueo.
      */
     public Parqueo(int filas, int columnas) {
         mapa = new boolean[filas][columnas];
-
     }
 
     /**
-     * metodo que revisa si el parque esta lleno
-     *
-     * @param mapa
-     * @return
+     * Revisa si el parqueo esta completamente lleno.
+     * 
+     * @return true si todos los espacios estan ocupados, false si hay al menos uno libre.
      */
     public boolean ParqueoLleno() {
         for (boolean[] fila : mapa) {
             for (boolean area : fila) {
-                if (area == false) {
+                if (!area) {
                     return false;
                 }
             }
@@ -41,36 +36,29 @@ public class Parqueo {
         return true;
     }
 
-    //recibe atributo privado "mapa"
+    /**
+     * Imprime el parqueo graficado en consola.
+     * '#' indica espacio ocupado, ' ' espacio libre.
+     */
     public void ImprimirParqueo() {
-        System.out.println("\n#: Espacio cupado por vehiculo\n");
+        System.out.println("\n#: Espacio ocupado por vehiculo\n");
         for (boolean[] fila : mapa) {
-
-            // Línea superior de cada casilla
-            for (boolean area : fila) {
-                System.out.printf("%2c%2c%2c ", '-', '-', '-');
-            }
+            for (boolean area : fila) System.out.printf("%2c%2c%2c ", '-', '-', '-');
             System.out.println();
-
-            // Línea del medio
-            for (boolean area : fila) {
-                if (area) {
-                    System.out.printf("%2c%2c%2c ", '|', '#', '|');
-                } else {
-                    System.out.printf("%2c%2c%2c ", '|', ' ', '|');
-                }
-            }
+            for (boolean area : fila) System.out.printf("%2c%2c%2c ", '|', area ? '#' : ' ', '|');
             System.out.println();
-
-            // Línea inferior
-            for (boolean area : fila) {
-                System.out.printf("%2c%2c%2c ", '-', '-', '-');
-            }
-            System.out.println();   // terminar la fila completa
-            System.out.println();   // espacio entre filas
+            for (boolean area : fila) System.out.printf("%2c%2c%2c ", '-', '-', '-');
+            System.out.println("\n");
         }
     }
 
+    /**
+     * Libera un espacio de parqueo y marca la salida del vehiculo.
+     * 
+     * @param ticket Ticket del vehículo a retirar.
+     * @param horaSalida Hora de salida (0-23).
+     * @param minutoSalida Minuto de salida (0-59).
+     */
     public void Retirar(Ticket ticket, int horaSalida, int minutoSalida) {
         int fila = ticket.getFila();
         int columna = ticket.getColumna();
@@ -79,25 +67,37 @@ public class Parqueo {
             System.out.println("Error: el espacio no esta disponible");
             return;
         }
-        
+
         mapa[fila][columna] = false;
         ticket.marcarSalida(horaSalida, minutoSalida);
         System.out.println("Tiempo estacionado: " + ticket.calcularTiempoEstacionado() + " minutos");
     }
 
+    /**
+     * Devuelve el numero de espacios libres en el parqueo.
+     * 
+     * @return Número de espacios libres.
+     */
     public int EspaciosDisponibles() {
-        int contadorEspacios = 0;
-        for (boolean[] filas : mapa) {
-            for (boolean area : filas) {
-                if (!area) {
-                    contadorEspacios += 1;
-                }
+        int contador = 0;
+        for (boolean[] fila : mapa) {
+            for (boolean area : fila) {
+                if (!area) contador++;
             }
         }
-        return contadorEspacios;
-
+        return contador;
     }
 
+    /**
+     * Estaciona un vehículo en una posición específica.
+     * 
+     * @param vehiculo Vehículo a estacionar.
+     * @param fila Fila donde se estacionará.
+     * @param columna Columna donde se estacionará.
+     * @param hora Hora de entrada.
+     * @param minuto Minuto de entrada.
+     * @return Ticket generado si se estaciona correctamente, null si hay error.
+     */
     public Ticket Aparcar(Vehiculo vehiculo, int fila, int columna, int hora, int minuto) {
         if (fila < 0 || fila >= mapa.length || columna < 0 || columna >= mapa[0].length) {
             System.out.println("Posicion invalida");
@@ -112,5 +112,4 @@ public class Parqueo {
         vehiculo.setEstaEstacionado(true);
         return new Ticket(fila, columna, hora, minuto, vehiculo);
     }
-
 }

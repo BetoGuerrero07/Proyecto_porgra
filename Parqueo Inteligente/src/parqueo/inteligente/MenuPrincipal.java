@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package parqueo.inteligente;
 
 import java.util.ArrayList;
@@ -9,16 +5,20 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- *
- * @author euced
+ * Clase main que contiene el menú de la aplicación
+ * y ejecuta el programa de Parqueo Inteligente.
+ * Permite estacionar, retirar, buscar vehiculos y mostrar el parqueo (espacios libres y ocupados).
+ * 
+ * Autor: euced
  */
 public class MenuPrincipal {
 
     /**
-     * @param args the command line arguments
+     * Metodo principal que ejecuta la aplicacion.
+     * 
+     * @param args Argumentos del main (no usados).
      */
     public static void main(String[] args) {
-        // TODO code application logic here
         Scanner sc = new Scanner(System.in);
         Random rnd = new Random();
 
@@ -42,12 +42,13 @@ public class MenuPrincipal {
             System.out.println("5. Salir");
             System.out.print("Elija opcion: ");
             opcion = sc.nextInt();
-            sc.nextLine(); // limpiar buffer
+            sc.nextLine(); // limpiar scanner
 
             switch (opcion) {
                 case 1:
                     System.out.print("Ingrese matricula del vehiculo: ");
                     String mat = sc.nextLine();
+                    //
                     Vehiculo veh = new Vehiculo(mat);
 
                     System.out.print("Ingrese fila para estacionar: ");
@@ -63,7 +64,6 @@ public class MenuPrincipal {
 
                     if (ticket != null) {
                         tickets.add(ticket);
-
                         System.out.println("Vehiculo estacionado correctamente.");
                         System.out.println("Ticket generado # " + ticket.getIdTicket());
                         System.out.println("Ubicacion: fila " + fila + ", columna " + col);
@@ -89,7 +89,7 @@ public class MenuPrincipal {
                     } else {
                         System.out.println("Vehiculo no encontrado o ya retirado.");
                     }
-                    sc.nextLine(); // limpiar buffer
+                    sc.nextLine(); // limpiar scanner
                     break;
 
                 case 3:
@@ -98,20 +98,21 @@ public class MenuPrincipal {
                     boolean encontrado = false;
                     for (Ticket t : tickets) {
                         if (t.getVehiculo().getMatricula().equalsIgnoreCase(matriculaBuscar) && t.getVehiculo().getEstaEstacionado()) {
-                            System.out.println("Vehículo encontrado en fila " + t.getFila() + ", columna " + t.getColumna());
+                            System.out.println("Vehiculo encontrado en fila " + t.getFila() + ", columna " + t.getColumna());
                             encontrado = true;
                             break;
                         }
                     }
                     if (!encontrado) {
-                        System.out.println("Vehículo no encontrado o ya retirado.");
+                        System.out.println("Vehiculo no encontrado o ya retirado.");
                     }
                     break;
 
                 case 4:
                     parqueo.ImprimirParqueo();
                     break;
-
+                    
+                    
                 case 5:
                     System.out.println("Saliendo...");
                     break;
@@ -120,8 +121,6 @@ public class MenuPrincipal {
                     System.out.println("Opcion invalida.");
             }
 
-        } while (opcion != 6);
-
-        sc.close();
+        } while (opcion != 5);
     }
 }
