@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Clase main que contiene el menú de la aplicación
+ * Clase main que contiene el menu de la aplicación
  * y ejecuta el programa de Parqueo Inteligente.
  * Permite estacionar, retirar, buscar vehiculos y mostrar el parqueo (espacios libres y ocupados).
  * 
@@ -30,7 +30,7 @@ public class MenuPrincipal {
 
         Parqueo parqueo = new Parqueo(filas, columnas);
         ArrayList<Ticket> tickets = new ArrayList<>();
-        sc.nextLine(); // limpiar buffer
+        sc.nextLine(); // limpiar scanner
 
         int opcion;
         do {
