@@ -50,7 +50,7 @@ public class MenuPrincipal {
                     String mat = sc.nextLine();
                     //
                     Vehiculo veh = new Vehiculo(mat);
-
+                    //se reciben los datos del vehiculo
                     System.out.print("Ingrese fila para estacionar: ");
                     int fila = sc.nextInt();
                     System.out.print("Ingrese columna para estacionar: ");

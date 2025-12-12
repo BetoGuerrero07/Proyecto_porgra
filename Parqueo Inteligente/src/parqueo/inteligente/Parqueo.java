@@ -41,16 +41,22 @@ public class Parqueo {
      * '#' indica espacio ocupado, ' ' espacio libre.
      */
     public void ImprimirParqueo() {
-        System.out.println("\n#: Espacio ocupado por vehiculo\n");
-        for (boolean[] fila : mapa) {
-            for (boolean area : fila) System.out.printf("%2c%2c%2c ", '-', '-', '-');
-            System.out.println();
-            for (boolean area : fila) System.out.printf("%2c%2c%2c ", '|', area ? '#' : ' ', '|');
-            System.out.println();
-            for (boolean area : fila) System.out.printf("%2c%2c%2c ", '-', '-', '-');
-            System.out.println("\n");
-        }
+    System.out.println("\n#: Espacio ocupado por vehiculo\n");
+
+    for (boolean[] fila : mapa) {
+        // Línea superior
+        for (boolean area : fila) System.out.printf("--- ");
+        System.out.println();
+
+        // Línea del medio
+        for (boolean area : fila) System.out.printf("|%c| ", area ? '#' : ' ');
+        System.out.println();
+
+        // Línea inferior
+        for (boolean area : fila) System.out.printf("--- ");
+        System.out.println("\n");
     }
+}
 
     /**
      * Libera un espacio de parqueo y marca la salida del vehiculo.
