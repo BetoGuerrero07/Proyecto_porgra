@@ -73,59 +73,67 @@ public class MenuPrincipal {
                 case 2:
                     char seleccion;
 
-                    do {
-                        System.out.println("Como desea retirar vehiculo?(1: numero de matricula)(2: fila y columna)");
-                        seleccion = sc.nextLine().charAt(0);
-                        switch (seleccion) {
+    do {
+        System.out.println("Como desea retirar vehiculo?");
+        System.out.println("1. Por matricula");
+        System.out.println("2. Por fila y columna");
+        System.out.print("Seleccione opcion: ");
+        seleccion = sc.nextLine().charAt(0);
 
-                            case '1':
-                                //retirar por matricula
-                                System.out.print("Ingrese matricula del vehiculo a retirar: ");
-                                String matriculaRetiro = sc.nextLine();
+        switch (seleccion) {
 
-                                Ticket ticketRetiro = null;
-                                for (Ticket t : tickets) {
-                                    if (t.getVehiculo().getMatricula().equalsIgnoreCase(matriculaRetiro) && t.getVehiculo().getEstaEstacionado()) {
-                                        ticketRetiro = t;
-                                        break;
-                                    }
-                                }
-                                if (ticketRetiro != null) {
-                                    System.out.print("Hora de salida: ");
-                                    int hs = sc.nextInt();
-                                    System.out.print("Minuto de salida: ");
-                                    int ms = sc.nextInt();
-                                    parqueo.Retirar(ticketRetiro, hs, ms);
-                                } else {
-                                    System.out.println("Vehiculo no encontrado o ya retirado.");
-                                }
-                                sc.nextLine(); // limpiar scanner
+            case '1':
+                System.out.print("Ingrese matricula: ");
+                String matriculaRetiro = sc.nextLine();
 
-                                break;
-                            case '2':
-                                //retirar por fila y columna
-                                System.out.print("Ingrese fila del vehiculo: ");
-                                int filaRetiro = sc.nextInt();
+                Ticket ticketRetiro = null;
+                for (Ticket t : tickets) {
+                    if (t.getVehiculo().getMatricula().equalsIgnoreCase(matriculaRetiro)
+                            && t.getVehiculo().getEstaEstacionado()) {
+                        ticketRetiro = t;
+                        break;
+                    }
+                }
 
-                                System.out.print("Ingrese columna del vehiculo: ");
-                                int colRetiro = sc.nextInt();
-
-                                System.out.print("Hora de salida: ");
-                                int hs2 = sc.nextInt();
-
-                                System.out.print("Minuto de salida: ");
-                                int ms2 = sc.nextInt();
-
-                                parqueo.Retirar(filaRetiro, colRetiro, hs2, ms2);
-
-                                sc.nextLine(); // limpiar buffer
-                                break;
-                            default:
-                                System.out.println("Seleccione una opcion valida");
-                        }
-
-                    } while (seleccion != '1' && seleccion != '2');
+                if (ticketRetiro == null) {
+                    System.out.println("Vehiculo no encontrado");
                     break;
+                }
+
+                System.out.print("Hora de salida: ");
+                int hs = sc.nextInt();
+                System.out.print("Minuto de salida: ");
+                int ms = sc.nextInt();
+                sc.nextLine();
+
+                if (!ticketRetiro.horaSalidaValida(hs, ms)) {
+                    System.out.println("Hora de salida invalida");
+                    break;
+                }
+
+                parqueo.Retirar(ticketRetiro, hs, ms);
+                break;
+
+            case '2':
+                System.out.print("Ingrese fila: ");
+                int f = sc.nextInt();
+                System.out.print("Ingrese columna: ");
+                int c = sc.nextInt();
+                System.out.print("Hora de salida: ");
+                int h = sc.nextInt();
+                System.out.print("Minuto de salida: ");
+                int m = sc.nextInt();
+                sc.nextLine();
+
+                parqueo.Retirar(f, c, h, m, tickets);
+                break;
+
+            default:
+                System.out.println("Opcion invalida");
+        }
+
+    } while (seleccion != '1' && seleccion != '2');
+    break;
                 case 3:
                     System.out.print("Ingrese matricula del vehiculo a buscar: ");
                     String matriculaBuscar = sc.nextLine();

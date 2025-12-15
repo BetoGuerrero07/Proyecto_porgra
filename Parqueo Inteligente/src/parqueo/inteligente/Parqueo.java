@@ -1,5 +1,7 @@
 package parqueo.inteligente;
 
+import java.util.ArrayList;
+
 /**
  * Representa un parqueo con espacios disponibles para vehiculos. Cada espacio
  * se representa como un valor booleano: true ocupado, false libre.
@@ -100,23 +102,44 @@ public class Parqueo {
      * @param horaSalida Hora de salida (0-23).
      * @param minutoSalida Minuto de salida (0-59).
      */
-    public void Retirar(int fila, int columna, int horaSalida, int minutoSalida) {
+    public void Retirar(int fila, int columna, int horaSalida, int minutoSalida, ArrayList<Ticket> tickets) {
 
-        // Validar posicion
         if (fila < 0 || fila >= mapa.length || columna < 0 || columna >= mapa[0].length) {
             System.out.println("Posicion invalida");
             return;
         }
 
-        // Validar que el espacio este ocupado
         if (!mapa[fila][columna]) {
-            System.out.println("El espacio ya esta libre");
+            System.out.println("No hay vehiculo en esa posicion");
+            return;
+        }
+
+        Ticket ticketEncontrado = null;
+
+        for (Ticket t : tickets) {
+            if (t.getFila() == fila && t.getColumna() == columna && t.getVehiculo().getEstaEstacionado()) {
+                ticketEncontrado = t;
+                break;
+            }
+        }
+
+        if (ticketEncontrado == null) {
+            System.out.println("Ticket no encontrado");
+            return;
+        }
+
+        // Validar hora antes de retirar
+        if (!ticketEncontrado.horaSalidaValida(horaSalida, minutoSalida)) {
+            System.out.println("Hora de salida invalida");
             return;
         }
 
         mapa[fila][columna] = false;
-        System.out.println("Vehiculo retirado del espacio [" + fila + "][" + columna + "]");
-        System.out.println("Hora de salida registrada: " + horaSalida + ":" + minutoSalida);
+        ticketEncontrado.marcarSalida(horaSalida, minutoSalida);
+
+        System.out.println("Vehiculo retirado correctamente");
+        System.out.println("Tiempo estacionado: "
+                + ticketEncontrado.calcularTiempoEstacionado() + " minutos");
     }
 
     /**
