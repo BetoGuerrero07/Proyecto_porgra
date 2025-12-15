@@ -66,74 +66,79 @@ public class MenuPrincipal {
                         tickets.add(ticket);
                         System.out.println("Vehiculo estacionado correctamente.");
                         System.out.println("Ticket generado # " + ticket.getIdTicket());
-                        System.out.println("Ubicacion: fila " + fila + ", columna " + col);
+                        System.out.println("Ubicacion: fila " + (fila ) + ", columna " + (col));
                     }
                     break;
 
                 case 2:
                     char seleccion;
+                    do {
+                        System.out.println("Como desea retirar vehiculo? (1: matricula, 2: fila y columna)");
+                        seleccion = sc.nextLine().charAt(0);
 
-    do {
-        System.out.println("Como desea retirar vehiculo?");
-        System.out.println("1. Por matricula");
-        System.out.println("2. Por fila y columna");
-        System.out.print("Seleccione opcion: ");
-        seleccion = sc.nextLine().charAt(0);
+                        Ticket ticketRetiro = null;
+                        int hs, ms;
 
-        switch (seleccion) {
+                        switch (seleccion) {
+                            case '1': // por matrícula
+                                System.out.print("Ingrese matricula del vehiculo: ");
+                                String matricula = sc.nextLine();
+                                for (Ticket t : tickets) {
+                                    if (t.getVehiculo().getMatricula().equalsIgnoreCase(matricula)
+                                            && t.getVehiculo().getEstaEstacionado()) {
+                                        ticketRetiro = t;
+                                        break;
+                                    }
+                                }
+                                break;
 
-            case '1':
-                System.out.print("Ingrese matricula: ");
-                String matriculaRetiro = sc.nextLine();
+                            case '2': // por fila y columna
+                                System.out.print("Ingrese fila: ");
+                                int fila2 = sc.nextInt();
+                                System.out.print("Ingrese columna: ");
+                                int col2 = sc.nextInt();
+                                for (Ticket t : tickets) {
+                                    if (t.getFila() == fila2 && t.getColumna() == col2
+                                            && t.getVehiculo().getEstaEstacionado()) {
+                                        ticketRetiro = t;
+                                        break;
+                                    }
+                                }
+                                sc.nextLine(); // limpiar buffer
+                                break;
 
-                Ticket ticketRetiro = null;
-                for (Ticket t : tickets) {
-                    if (t.getVehiculo().getMatricula().equalsIgnoreCase(matriculaRetiro)
-                            && t.getVehiculo().getEstaEstacionado()) {
-                        ticketRetiro = t;
-                        break;
-                    }
-                }
+                            default:
+                                System.out.println("Seleccione una opción válida");
+                        }
 
-                if (ticketRetiro == null) {
-                    System.out.println("Vehiculo no encontrado");
+                        if (ticketRetiro != null) {
+                            // Validar hora de salida
+                            do {
+                                System.out.print("Hora de salida (0-23): ");
+                                hs = sc.nextInt();
+                                System.out.print("Minuto de salida (0-59): ");
+                                ms = sc.nextInt();
+
+                                if (!ticketRetiro.horaSalidaValida(hs, ms)) {
+                                    System.out.println("Hora de salida inválida. Debe ser posterior a la entrada.");
+                                } else {
+                                    break;
+                                }
+                            } while (true);
+                            sc.nextLine(); // limpiar buffer
+
+                            // Retirar vehículo y mostrar costo
+                            parqueo.Retirar(ticketRetiro, hs, ms);
+                            int costo = ticketRetiro.calcularCosto();
+                            System.out.println("Costo a pagar: L." + costo);
+
+                        } else {
+                            System.out.println("Vehiculo no encontrado o ya retirado.");
+                        }
+
+                    } while (seleccion != '1' && seleccion != '2');
                     break;
-                }
 
-                System.out.print("Hora de salida: ");
-                int hs = sc.nextInt();
-                System.out.print("Minuto de salida: ");
-                int ms = sc.nextInt();
-                sc.nextLine();
-
-                if (!ticketRetiro.horaSalidaValida(hs, ms)) {
-                    System.out.println("Hora de salida invalida");
-                    break;
-                }
-
-                parqueo.Retirar(ticketRetiro, hs, ms);
-                break;
-
-            case '2':
-                System.out.print("Ingrese fila: ");
-                int f = sc.nextInt();
-                System.out.print("Ingrese columna: ");
-                int c = sc.nextInt();
-                System.out.print("Hora de salida: ");
-                int h = sc.nextInt();
-                System.out.print("Minuto de salida: ");
-                int m = sc.nextInt();
-                sc.nextLine();
-
-                parqueo.Retirar(f, c, h, m, tickets);
-                break;
-
-            default:
-                System.out.println("Opcion invalida");
-        }
-
-    } while (seleccion != '1' && seleccion != '2');
-    break;
                 case 3:
                     System.out.print("Ingrese matricula del vehiculo a buscar: ");
                     String matriculaBuscar = sc.nextLine();

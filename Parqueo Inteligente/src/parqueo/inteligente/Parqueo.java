@@ -49,7 +49,7 @@ public class Parqueo {
         for (boolean[] fila : mapa) {
             // Línea superior de cada casilla
             for (boolean area : fila) {
-                System.out.print("--- ");
+                System.out.print("=== ");
             }
             System.out.println();
 
@@ -67,7 +67,7 @@ public class Parqueo {
 
             // Línea inferior
             for (boolean area : fila) {
-                System.out.print("--- ");
+                System.out.print("=== ");
             }
             System.out.println("\n");
         }
@@ -81,11 +81,17 @@ public class Parqueo {
      * @param minutoSalida Minuto de salida (0-59).
      */
     public void Retirar(Ticket ticket, int horaSalida, int minutoSalida) {
-        int fila = ticket.getFila();
-        int columna = ticket.getColumna();
+        int fila = ticket.getFila() - 1 ;
+        int columna = ticket.getColumna() - 1;
 
         if (!mapa[fila][columna]) {
             System.out.println("Error: el espacio no esta disponible");
+            return;
+        }
+        
+        // Validar hora antes de retirar
+        if (!ticket.horaSalidaValida(horaSalida, minutoSalida)) {
+            System.out.println("Hora de salida invalida");
             return;
         }
 
@@ -97,13 +103,17 @@ public class Parqueo {
     /**
      * Libera un espacio de parqueo indicando fila y columna directamente.
      *
-     * @param fila Fila del espacio.
-     * @param columna Columna del espacio.
+     * @param filaUsuario Fila del espacio.
+     * @param columnaUsuario Columna del espacio.
      * @param horaSalida Hora de salida (0-23).
      * @param minutoSalida Minuto de salida (0-59).
+     * @param tickets La lista de tickets registrados
      */
-    public void Retirar(int fila, int columna, int horaSalida, int minutoSalida, ArrayList<Ticket> tickets) {
-
+    public void Retirar(int filaUsuario, int columnaUsuario, int horaSalida, int minutoSalida, ArrayList<Ticket> tickets) {
+        
+        int fila = filaUsuario - 1;
+        int columna = columnaUsuario -1;
+        
         if (fila < 0 || fila >= mapa.length || columna < 0 || columna >= mapa[0].length) {
             System.out.println("Posicion invalida");
             return;
@@ -117,7 +127,7 @@ public class Parqueo {
         Ticket ticketEncontrado = null;
 
         for (Ticket t : tickets) {
-            if (t.getFila() == fila && t.getColumna() == columna && t.getVehiculo().getEstaEstacionado()) {
+            if (t.getFila() == filaUsuario && t.getColumna() == columnaUsuario && t.getVehiculo().getEstaEstacionado()) {
                 ticketEncontrado = t;
                 break;
             }
@@ -163,13 +173,15 @@ public class Parqueo {
      * Estaciona un vehiculo en una posicion específica.
      *
      * @param vehiculo Vehículo a estacionar.
-     * @param fila Fila donde se estacionará.
-     * @param columna Columna donde se estacionará.
+     * @param filaUsuario Fila donde se estacionará(seleccionada por usuario).
+     * @param columnaUsuario Columna donde se estacionará(seleccionada por usuario).
      * @param hora Hora de entrada.
      * @param minuto Minuto de entrada.
      * @return Ticket generado si se estaciona correctamente, null si hay error.
      */
-    public Ticket Aparcar(Vehiculo vehiculo, int fila, int columna, int hora, int minuto) {
+    public Ticket Aparcar(Vehiculo vehiculo, int filaUsuario, int columnaUsuario, int hora, int minuto) {
+        int fila = filaUsuario - 1;
+        int columna = columnaUsuario -1;
         if (fila < 0 || fila >= mapa.length || columna < 0 || columna >= mapa[0].length) {
             System.out.println("Posicion invalida");
             return null;
@@ -181,6 +193,6 @@ public class Parqueo {
 
         mapa[fila][columna] = true;
         vehiculo.setEstaEstacionado(true);
-        return new Ticket(fila, columna, hora, minuto, vehiculo);
+        return new Ticket(filaUsuario, columnaUsuario, hora, minuto, vehiculo);
     }
 }
