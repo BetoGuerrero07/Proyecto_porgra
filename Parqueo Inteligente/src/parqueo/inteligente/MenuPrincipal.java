@@ -5,17 +5,17 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Clase main que contiene el menu de la aplicación
- * y ejecuta el programa de Parqueo Inteligente.
- * Permite estacionar, retirar, buscar vehiculos y mostrar el parqueo (espacios libres y ocupados).
- * 
+ * Clase main que contiene el menu de la aplicación y ejecuta el programa de
+ * Parqueo Inteligente. Permite estacionar, retirar, buscar vehiculos y mostrar
+ * el parqueo (espacios libres y ocupados).
+ *
  * Autor: euced
  */
 public class MenuPrincipal {
 
     /**
      * Metodo principal que ejecuta la aplicacion.
-     * 
+     *
      * @param args Argumentos del main (no usados).
      */
     public static void main(String[] args) {
@@ -71,27 +71,61 @@ public class MenuPrincipal {
                     break;
 
                 case 2:
-                    System.out.print("Ingrese matricula del vehiculo a retirar: ");
-                    String matriculaRetiro = sc.nextLine();
-                    Ticket ticketRetiro = null;
-                    for (Ticket t : tickets) {
-                        if (t.getVehiculo().getMatricula().equalsIgnoreCase(matriculaRetiro) && t.getVehiculo().getEstaEstacionado()) {
-                            ticketRetiro = t;
-                            break;
-                        }
-                    }
-                    if (ticketRetiro != null) {
-                        System.out.print("Hora de salida: ");
-                        int hs = sc.nextInt();
-                        System.out.print("Minuto de salida: ");
-                        int ms = sc.nextInt();
-                        parqueo.Retirar(ticketRetiro, hs, ms);
-                    } else {
-                        System.out.println("Vehiculo no encontrado o ya retirado.");
-                    }
-                    sc.nextLine(); // limpiar scanner
-                    break;
+                    char seleccion;
 
+                    do {
+                        System.out.println("Como desea retirar vehiculo?(1: numero de matricula)(2: fila y columna)");
+                        seleccion = sc.nextLine().charAt(0);
+                        switch (seleccion) {
+
+                            case '1':
+                                //retirar por matricula
+                                System.out.print("Ingrese matricula del vehiculo a retirar: ");
+                                String matriculaRetiro = sc.nextLine();
+
+                                Ticket ticketRetiro = null;
+                                for (Ticket t : tickets) {
+                                    if (t.getVehiculo().getMatricula().equalsIgnoreCase(matriculaRetiro) && t.getVehiculo().getEstaEstacionado()) {
+                                        ticketRetiro = t;
+                                        break;
+                                    }
+                                }
+                                if (ticketRetiro != null) {
+                                    System.out.print("Hora de salida: ");
+                                    int hs = sc.nextInt();
+                                    System.out.print("Minuto de salida: ");
+                                    int ms = sc.nextInt();
+                                    parqueo.Retirar(ticketRetiro, hs, ms);
+                                } else {
+                                    System.out.println("Vehiculo no encontrado o ya retirado.");
+                                }
+                                sc.nextLine(); // limpiar scanner
+
+                                break;
+                            case '2':
+                                //retirar por fila y columna
+                                System.out.print("Ingrese fila del vehiculo: ");
+                                int filaRetiro = sc.nextInt();
+
+                                System.out.print("Ingrese columna del vehiculo: ");
+                                int colRetiro = sc.nextInt();
+
+                                System.out.print("Hora de salida: ");
+                                int hs2 = sc.nextInt();
+
+                                System.out.print("Minuto de salida: ");
+                                int ms2 = sc.nextInt();
+
+                                parqueo.Retirar(filaRetiro, colRetiro, hs2, ms2);
+
+                                sc.nextLine(); // limpiar buffer
+                                break;
+                            default:
+                                System.out.println("Seleccione una opcion valida");
+                        }
+
+                    } while (seleccion != '1' && seleccion != '2');
+                    break;
                 case 3:
                     System.out.print("Ingrese matricula del vehiculo a buscar: ");
                     String matriculaBuscar = sc.nextLine();
@@ -111,8 +145,7 @@ public class MenuPrincipal {
                 case 4:
                     parqueo.ImprimirParqueo();
                     break;
-                    
-                    
+
                 case 5:
                     System.out.println("Saliendo...");
                     break;

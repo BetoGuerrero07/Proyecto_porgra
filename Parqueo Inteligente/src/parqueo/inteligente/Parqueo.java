@@ -1,9 +1,9 @@
 package parqueo.inteligente;
 
 /**
- * Representa un parqueo con espacios disponibles para vehiculos.
- * Cada espacio se representa como un valor booleano: true ocupado, false libre.
- * 
+ * Representa un parqueo con espacios disponibles para vehiculos. Cada espacio
+ * se representa como un valor booleano: true ocupado, false libre.
+ *
  * @author euced
  */
 public class Parqueo {
@@ -12,7 +12,7 @@ public class Parqueo {
 
     /**
      * Constructor de Parqueo.
-     * 
+     *
      * @param filas Cantidad de filas del parqueo.
      * @param columnas Cantidad de columnas del parqueo.
      */
@@ -22,8 +22,9 @@ public class Parqueo {
 
     /**
      * Revisa si el parqueo esta completamente lleno.
-     * 
-     * @return true si todos los espacios estan ocupados, false si hay al menos uno libre.
+     *
+     * @return true si todos los espacios estan ocupados, false si hay al menos
+     * uno libre.
      */
     public boolean ParqueoLleno() {
         for (boolean[] fila : mapa) {
@@ -37,30 +38,42 @@ public class Parqueo {
     }
 
     /**
-     * Imprime el parqueo graficado en consola.
-     * '#' indica espacio ocupado, ' ' espacio libre.
+     * Imprime el parqueo graficado en consola. '#' indica espacio ocupado, ' '
+     * espacio libre.
      */
     public void ImprimirParqueo() {
-    System.out.println("\n#: Espacio ocupado por vehiculo\n");
+        System.out.println("\n#: Espacio ocupado por vehiculo\n");
 
-    for (boolean[] fila : mapa) {
-        // Línea superior
-        for (boolean area : fila) System.out.printf("--- ");
-        System.out.println();
+        for (boolean[] fila : mapa) {
+            // Línea superior de cada casilla
+            for (boolean area : fila) {
+                System.out.print("--- ");
+            }
+            System.out.println();
 
-        // Línea del medio
-        for (boolean area : fila) System.out.printf("|%c| ", area ? '#' : ' ');
-        System.out.println();
+            // Línea del medio
+            for (boolean area : fila) {
+                char simbolo;
+                if (area) {
+                    simbolo = '#';
+                } else {
+                    simbolo = ' ';
+                }
+                System.out.printf("|%c| ", simbolo);
+            }
+            System.out.println();
 
-        // Línea inferior
-        for (boolean area : fila) System.out.printf("--- ");
-        System.out.println("\n");
+            // Línea inferior
+            for (boolean area : fila) {
+                System.out.print("--- ");
+            }
+            System.out.println("\n");
+        }
     }
-}
 
     /**
      * Libera un espacio de parqueo y marca la salida del vehiculo.
-     * 
+     *
      * @param ticket Ticket del vehiculo a retirar.
      * @param horaSalida Hora de salida (0-23).
      * @param minutoSalida Minuto de salida (0-59).
@@ -80,15 +93,44 @@ public class Parqueo {
     }
 
     /**
+     * Libera un espacio de parqueo indicando fila y columna directamente.
+     *
+     * @param fila Fila del espacio.
+     * @param columna Columna del espacio.
+     * @param horaSalida Hora de salida (0-23).
+     * @param minutoSalida Minuto de salida (0-59).
+     */
+    public void Retirar(int fila, int columna, int horaSalida, int minutoSalida) {
+
+        // Validar posicion
+        if (fila < 0 || fila >= mapa.length || columna < 0 || columna >= mapa[0].length) {
+            System.out.println("Posicion invalida");
+            return;
+        }
+
+        // Validar que el espacio este ocupado
+        if (!mapa[fila][columna]) {
+            System.out.println("El espacio ya esta libre");
+            return;
+        }
+
+        mapa[fila][columna] = false;
+        System.out.println("Vehiculo retirado del espacio [" + fila + "][" + columna + "]");
+        System.out.println("Hora de salida registrada: " + horaSalida + ":" + minutoSalida);
+    }
+
+    /**
      * Devuelve el numero de espacios libres en el parqueo.
-     * 
+     *
      * @return Numero de espacios libres.
      */
     public int EspaciosDisponibles() {
         int contador = 0;
         for (boolean[] fila : mapa) {
             for (boolean area : fila) {
-                if (!area) contador++;
+                if (!area) {
+                    contador++;
+                }
             }
         }
         return contador;
@@ -96,7 +138,7 @@ public class Parqueo {
 
     /**
      * Estaciona un vehiculo en una posicion específica.
-     * 
+     *
      * @param vehiculo Vehículo a estacionar.
      * @param fila Fila donde se estacionará.
      * @param columna Columna donde se estacionará.
