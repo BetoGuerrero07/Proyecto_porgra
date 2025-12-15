@@ -6,12 +6,12 @@ import java.util.Scanner;
 
 /**
  * Clase main que contiene el menu de la aplicación y ejecuta el programa de
- * Parqueo Inteligente. Permite estacionar, retirar, buscar vehiculos y mostrar
+ * Valet Parking. Permite estacionar, retirar, buscar ubicacion vehiculo y mostrar
  * el parqueo (espacios libres y ocupados).
  *
- * Autor: euced
+ * Autor: David Euceda, Alberto Guerrero, Jeremyah Mercado
  */
-public class MenuPrincipal {
+public class Valet_Parking {
 
     /**
      * Metodo principal que ejecuta la aplicacion.
@@ -22,7 +22,7 @@ public class MenuPrincipal {
         Scanner sc = new Scanner(System.in);
         Random rnd = new Random();
 
-        System.out.println("Bienvenido al Parqueo Inteligente");
+        System.out.println("Bienvenido al Valet Parking");
         System.out.print("Ingrese numero de filas: ");
         int filas = sc.nextInt();
         System.out.print("Ingrese numero de columnas: ");
