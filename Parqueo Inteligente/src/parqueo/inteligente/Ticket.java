@@ -87,31 +87,6 @@ public class Ticket {
     }
 
     /**
-     * Calcula el costo del estacionamiento según la duración.
-     *
-     * @return costo en lempiras (L.).
-     */
-    public int calcularCosto() {
-        int tiempo = calcularTiempoEstacionado(); // tiempo en minutos
-        if (tiempo <= 0) {
-            return 0; // por si algo sale mal
-        }
-
-        if (tiempo <= 180) { // 0 a 3 horas
-            return 10;
-        } else if (tiempo <= 240) { // 3:01 a 4 horas
-            return 20;
-        } else if (tiempo <= 300) { // 4:01 a 5 horas
-            return 30;
-        } else if (tiempo <= 360) { // 5:01 a 6 horas
-            return 40;
-        } else { // 6:01 a 24 horas
-            return 100;
-        }
-        
-    }
-
-    /**
      * @return Fila donde esta estacionado el vehiculo
      */
     public int getFila() {

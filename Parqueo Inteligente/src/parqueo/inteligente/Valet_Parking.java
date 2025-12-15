@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 /**
  * Clase main que contiene el menu de la aplicación y ejecuta el programa de
- * Valet Parking. Permite estacionar, retirar, buscar ubicacion vehiculo y mostrar
- * el parqueo (espacios libres y ocupados).
+ * Valet Parking. Permite estacionar, retirar, buscar ubicacion vehiculo y
+ * mostrar el parqueo (espacios libres y ocupados).
  *
  * Autor: David Euceda, Alberto Guerrero, Jeremyah Mercado
  */
@@ -66,7 +66,7 @@ public class Valet_Parking {
                         tickets.add(ticket);
                         System.out.println("Vehiculo estacionado correctamente.");
                         System.out.println("Ticket generado # " + ticket.getIdTicket());
-                        System.out.println("Ubicacion: fila " + (fila ) + ", columna " + (col));
+                        System.out.println("Ubicacion: fila " + (fila) + ", columna " + (col));
                     }
                     break;
 
@@ -119,7 +119,7 @@ public class Valet_Parking {
                                 System.out.print("Minuto de salida (0-59): ");
                                 ms = sc.nextInt();
 
-                                if (!ticketRetiro.horaSalidaValida(hs, ms)) {
+                                if (!UtilidadesParqueo.horaValida(hs, ms) || !ticketRetiro.horaSalidaValida(hs, ms)) {
                                     System.out.println("Hora de salida inválida. Debe ser posterior a la entrada.");
                                 } else {
                                     break;
@@ -129,7 +129,10 @@ public class Valet_Parking {
 
                             // Retirar vehículo y mostrar costo
                             parqueo.Retirar(ticketRetiro, hs, ms);
-                            int costo = ticketRetiro.calcularCosto();
+
+                            int tiempo = ticketRetiro.calcularTiempoEstacionado();
+
+                            int costo = UtilidadesParqueo.calcularCosto(tiempo);
                             System.out.println("Costo a pagar: L." + costo);
 
                         } else {
