@@ -2,52 +2,71 @@ package interfaz;
 
 /**
  * Clase utilitaria para desplegar texto en una pantalla con bordes.
- * Crea una interfaz visual de texto con dimensiones fijas y
- * formato automatico para el contenido.
+ * Crea una interfaz visual de texto con ancho fijo y alto dinamico
+ * que se ajusta automaticamente segun el contenido.
  *
  * Uso: PantallaTexto.mostrar(texto);
  * 
  * Caracteristicas:
  * - Ancho fijo de 50 caracteres
- * - Alto de 25 lineas
+ * - Alto dinamico (se ajusta al contenido + margen)
+ * - Ajuste automatico para graficos grandes
  */
 public class PantallaTexto {
     
     /**
-     * Ancho total de la pantalla en caracteres (incluye bordes)
+     * Ancho total de la pantalla en caracteres (incluye los bordes)
      */
     private static final int ANCHO = 50;
     
     /**
-     * Alto total de la pantalla en lineas (incluye bordes)
+     * Margen minimo de lineas vacias arriba y abajo del contenido.
+     * AJUSTAR ESTE VALOR para cambiar el espaciado vertical:
+     * - 0 = sin margen (contenido pegado al borde)
+     * - 1 = margen minimo (recomendado)
+     * - 2 = margen normal
+     * - 3+ = margen amplio
      */
-    private static final int ALTO = 25;
+    private static final int MARGEN_ALTO = 1;
     
     /**
      * Muestra texto en una pantalla con formato y bordes.
      * El texto se divide en lineas automaticamente y se ajusta
-     * al ancho disponible. Las lineas vacias se rellenan con espacios.
+     * al ancho disponible. El alto se calcula dinamicamente
+     * segun la cantidad de lineas del contenido.
      * 
      * @param texto Contenido a mostrar en la pantalla
      */
     public static void mostrar(String texto) {
-//        limpiarConsola();
+        limpiarConsola();
+        //dividir texto en lineas
+        String[] lineas = dividirEnLineas(texto);
+        
+        //calcular alto necesario (lineas + margen superior e inferior)
+        int altoTotal = lineas.length + (MARGEN_ALTO * 2);
         
         //borde superior
         imprimirLinea();
         
-        //dividir texto en lineas
-        String[] lineas = dividirEnLineas(texto);
+        //margen superior
+        for (int i = 0; i < MARGEN_ALTO; i++) {
+            System.out.print("|");
+            System.out.print(espacios(ANCHO - 2));
+            System.out.println("|");
+        }
         
         //imprimir contenido
-        for (int i = 0; i < ALTO - 2; i++) {
-            System.out.print("| ");
-            if (i < lineas.length) {
-                System.out.print(ajustarAncho(lineas[i]));
-            } else {
-                System.out.print(espacios(ANCHO - 4));
-            }
-            System.out.println(" |");
+        for (int i = 0; i < lineas.length; i++) {
+            System.out.print("|" + " ");
+            System.out.print(ajustarAncho(lineas[i]));
+            System.out.println("|");
+        }
+        
+        //margen inferior
+        for (int i = 0; i < MARGEN_ALTO; i++) {
+            System.out.print("|");
+            System.out.print(espacios(ANCHO - 2));
+            System.out.println("|");
         }
         
         //borde inferior
@@ -56,6 +75,8 @@ public class PantallaTexto {
     
     /**
      * Divide un texto en lineas separadas por saltos de linea (\n).
+     * Implementa word wrap automatico: si una linea es muy larga,
+     * se divide en multiples lineas que caben en el ancho disponible.
      * Cuenta manualmente los saltos de linea y crea un arreglo
      * con cada linea como elemento separado.
      * 
@@ -67,7 +88,9 @@ public class PantallaTexto {
             return new String[0];
         }
         
-        //contar saltos de linea
+        int anchoMax = ANCHO - 3; //ancho disponible por linea
+        
+        //primer paso: dividir por saltos de linea
         int numLineas = 1;
         for (int i = 0; i < texto.length(); i++) {
             if (texto.charAt(i) == '\n') {
@@ -75,36 +98,82 @@ public class PantallaTexto {
             }
         }
         
-        //crear arreglo
-        String[] lineas = new String[numLineas];
+        String[] lineasTemp = new String[numLineas];
         int indice = 0;
         String lineaActual = "";
         
         for (int i = 0; i < texto.length(); i++) {
             char c = texto.charAt(i);
             if (c == '\n') {
-                lineas[indice] = lineaActual;
+                lineasTemp[indice] = lineaActual;
                 indice++;
                 lineaActual = "";
             } else {
                 lineaActual += c;
             }
         }
-        lineas[indice] = lineaActual;
+        lineasTemp[indice] = lineaActual;
         
-        return lineas;
+        //segundo paso: aplicar word wrap a lineas largas
+        int totalLineasFinal = 0;
+        for (int i = 0; i < lineasTemp.length; i++) {
+            if (lineasTemp[i].length() > anchoMax) {
+                //calcular cuantas lineas se necesitan
+                int lineasNecesarias = (lineasTemp[i].length() + anchoMax - 1) / anchoMax;
+                totalLineasFinal += lineasNecesarias;
+            } else {
+                totalLineasFinal++;
+            }
+        }
+        
+        //crear arreglo final con word wrap
+        String[] lineasFinal = new String[totalLineasFinal];
+        int indiceFinal = 0;
+        
+        for (int i = 0; i < lineasTemp.length; i++) {
+            String linea = lineasTemp[i];
+            
+            if (linea.length() <= anchoMax) {
+                lineasFinal[indiceFinal] = linea;
+                indiceFinal++;
+            } else {
+                //dividir linea larga
+                int inicio = 0;
+                while (inicio < linea.length()) {
+                    int fin = inicio + anchoMax;
+                    if (fin > linea.length()) {
+                        fin = linea.length();
+                    }
+                    
+                    String segmento = "";
+                    for (int j = inicio; j < fin; j++) {
+                        segmento += linea.charAt(j);
+                    }
+                    
+                    lineasFinal[indiceFinal] = segmento;
+                    indiceFinal++;
+                    inicio = fin;
+                }
+            }
+        }
+        
+        return lineasFinal;
     }
     
     /**
      * Ajusta una linea al ancho disponible de la pantalla.
      * Si la linea es mas corta, se rellena con espacios.
-     * Si es mas larga, se corta al ancho maximo.
+     * Si es mas larga, NO se corta, sino que continua en la siguiente linea.
+     * MARGEN HORIZONTAL: 1 espacio entre el borde y el contenido.
+     * Para cambiar el margen horizontal, modifica los valores en mostrar():
+     * - Cambiar ANCHO - 2 por ANCHO - 4 para margen de 2 espacios
+     * - Cambiar "|" + " " por "|" + "  " para margen de 2 espacios
      * 
      * @param linea Texto de la linea a ajustar
-     * @return Linea ajustada al ancho de la pantalla
+     * @return Linea ajustada al ancho de la pantalla (rellena con espacios)
      */
     private static String ajustarAncho(String linea) {
-        int anchoDisponible = ANCHO - 4;
+        int anchoDisponible = ANCHO - 3; // -2 bordes, -1 espacio margen
         String resultado = "";
         
         if (linea.length() <= anchoDisponible) {
@@ -114,7 +183,7 @@ public class PantallaTexto {
                 resultado += " ";
             }
         } else {
-            //cortar linea manualmente sin substring
+            //tomar solo lo que cabe en esta linea
             for (int i = 0; i < anchoDisponible; i++) {
                 resultado += linea.charAt(i);
             }
@@ -153,28 +222,10 @@ public class PantallaTexto {
     
     /**
      * Limpia la consola imprimiendo lineas en blanco.
-     * Detecta el sistema operativo manualmente para determinar
-     * el metodo apropiado, aunque actualmente usa un metodo universal.
-     * Nota: Metodo actualmente comentado en mostrar().
      */
     private static void limpiarConsola() {
-        //verificar sistema operativo manualmente
-        String os = System.getProperty("os.name");
-        boolean esWindows = false;
-        
-        //buscar "Windows" manualmente sin contains
-        for (int i = 0; i <= os.length() - 7; i++) {
-            if (os.charAt(i) == 'W' && i + 6 < os.length() &&
-                os.charAt(i+1) == 'i' && os.charAt(i+2) == 'n' && 
-                os.charAt(i+3) == 'd' && os.charAt(i+4) == 'o' && 
-                os.charAt(i+5) == 'w' && os.charAt(i+6) == 's') {
-                esWindows = true;
-                break;
-            }
-        }
-        
         //imprimir lineas en blanco para simular limpieza
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 3; i++) {
             System.out.println();
         }
     }

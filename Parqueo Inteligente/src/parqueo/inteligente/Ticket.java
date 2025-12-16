@@ -23,11 +23,11 @@ public class Ticket {
     /**
      * Constructor del ticket.
      *
-     * @param fila Fila donde se estaciona el vehiculo.
-     * @param columna Columna donde se estaciona el vehiculo.
-     * @param horaEntrada Hora de entrada del vehiculo.
+     * @param fila          Fila donde se estaciona el vehiculo.
+     * @param columna       Columna donde se estaciona el vehiculo.
+     * @param horaEntrada   Hora de entrada del vehiculo.
      * @param minutoEntrada Minuto de entrada del vehiculo.
-     * @param vehiculo Vehiculo asociado al ticket.
+     * @param vehiculo      Vehiculo asociado al ticket.
      */
     public Ticket(int fila, int columna, int horaEntrada, int minutoEntrada, Vehiculo vehiculo) {
         Random rnd = new Random();
@@ -44,7 +44,7 @@ public class Ticket {
     /**
      * Marca la salida del vehículo.
      *
-     * @param hora Hora de salida.
+     * @param hora   Hora de salida.
      * @param minuto Minuto de salida.
      */
     public void marcarSalida(int hora, int minuto) {
@@ -66,6 +66,14 @@ public class Ticket {
 
     }
 
+    /**
+     * Valida si la hora validada esta dentro del rango de horas y si esta ocurre
+     * despues de la hora inicial
+     * 
+     * @param hora
+     * @param minuto
+     * @return
+     */
     public boolean horaSalidaValida(int hora, int minuto) {
 
         if (hora < 0 || hora > 23) {
@@ -126,34 +134,5 @@ public class Ticket {
      */
     public int getIdTicket() {
         return idTicket;
-    }
-
-    /**
-     * Obtiene la informacion del ticket como String
-     * @return String con la info del ticket
-     */
-    public String ObtenerInfo() {
-        String info = "";
-        info += "Ticket #" + idTicket + "\n";
-        info += "Matricula: " + vehiculo.getMatricula() + "\n";
-        info += "Ubicacion: fila " + fila + ", columna " + columna + "\n";
-        info += "Entrada: " + horaEntrada + ":";
-        if (minutoEntrada < 10) {
-            info += "0";
-        }
-        info += minutoEntrada + "\n";
-        
-        if (horaSalida != -1) {
-            info += "Salida: " + horaSalida + ":";
-            if (minutoSalida < 10) {
-                info += "0";
-            }
-            info += minutoSalida + "\n";
-            info += "Tiempo: " + calcularTiempoEstacionado() + " minutos\n";
-        } else {
-            info += "Aun estacionado\n";
-        }
-        
-        return info;
     }
 }

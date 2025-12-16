@@ -10,9 +10,6 @@ package interfaz;
  * -Agregar contenido: capturador.agregarLinea("texto");
  * -Mostrar: capturador.mostrarEnPantalla();
  * -Limpiar: capturador.limpiar();
- * 
- * @author Sistema Parqueo Inteligente
- * @version 1.0
  */
 public class CapturadorSalida {
     

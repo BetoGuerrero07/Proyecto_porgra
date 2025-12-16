@@ -40,55 +40,57 @@ public class Parqueo {
     }
 
     /**
-     * Imprime el parqueo graficado en consola. '#' indica espacio ocupado, ' '
-     * espacio libre.
-     */
-    public void ImprimirParqueo() {
-        System.out.println("\n#: Espacio ocupado por vehiculo\n");
-
-        for (boolean[] fila : mapa) {
-            // Línea superior de cada casilla
-            for (boolean area : fila) {
-                System.out.print("=== ");
-            }
-            System.out.println();
-
-            // Línea del medio
-            for (boolean area : fila) {
-                char simbolo;
-                if (area) {
-                    simbolo = '#';
-                } else {
-                    simbolo = ' ';
-                }
-                System.out.printf("|%c| ", simbolo);
-            }
-            System.out.println();
-
-            // Línea inferior
-            for (boolean area : fila) {
-                System.out.print("=== ");
-            }
-            System.out.println("\n");
-        }
-    }
-
-    /**
      * Obtiene la representacion grafica del parqueo como String.
+     * El grafico se centra en la pantalla.
      * '#' indica espacio ocupado, ' ' espacio libre.
      * @return String con el grafico del parqueo
      */
     public String ObtenerParqueoGrafico() {
         String resultado = "";
-        resultado += "#: Espacio ocupado por vehiculo\n\n";
+        
+        // calcular ancho del grafico (4 caracteres por espacio)
+        int anchoGrafico = mapa[0].length * 4;
+        
+        // calcular espacios para centrar (ancho pantalla = 46 caracteres utiles)
+        int espaciosCentrado = (46 - anchoGrafico) / 2;
+        if (espaciosCentrado < 0) {
+            espaciosCentrado = 0;
+        }
+        
+        // titulo centrado
+        String titulo = "PARQUEO GRAFICADO";
+        int espaciosTitulo = (46 - titulo.length()) / 2;
+        for (int i = 0; i < espaciosTitulo; i++) {
+            resultado += " ";
+        }
+        resultado += titulo + "\n";
+        
+        // subtitulo centrado
+        String leyenda = "#: Ocupado";
+        int espaciosLeyenda = (46 - leyenda.length()) / 2;
+        for (int i = 0; i < espaciosLeyenda; i++) {
+            resultado += " ";
+        }
+        resultado += leyenda + "\n\n";
 
+        // grafico del parqueo
         for (boolean[] fila : mapa) {
+            // espacios para centrar cada linea
+            for (int i = 0; i < espaciosCentrado; i++) {
+                resultado += " ";
+            }
+            
             // linea superior de cada casilla
             for (boolean area : fila) {
                 resultado += "=== ";
             }
             resultado += "\n";
 
+            // espacios para centrar
+            for (int i = 0; i < espaciosCentrado; i++) {
+                resultado += " ";
+            }
+            
             // linea del medio
             for (boolean area : fila) {
                 char simbolo;
@@ -103,6 +105,11 @@ public class Parqueo {
             }
             resultado += "\n";
 
+            // espacios para centrar
+            for (int i = 0; i < espaciosCentrado; i++) {
+                resultado += " ";
+            }
+            
             // linea inferior
             for (boolean area : fila) {
                 resultado += "=== ";

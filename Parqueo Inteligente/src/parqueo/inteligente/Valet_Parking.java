@@ -46,7 +46,7 @@ public class Valet_Parking {
             capturador.agregarLinea("4. Mostrar parqueo graficado");
             capturador.agregarLinea("5. Salir");
             capturador.mostrarEnPantalla();
-            capturador.limpiar();
+            capturador.limpiar(); //limpiar para que el proximo contenido se muestre en pantalla separada
             System.out.print("Elija opcion: ");
             opcion = sc.nextInt();
             sc.nextLine(); // limpiar scanner
@@ -69,7 +69,6 @@ public class Valet_Parking {
                     if (validacion.length() > 0) {
                         capturador.agregar(validacion);
                         capturador.mostrarEnPantalla();
-                        capturador.limpiar();
                     } else {
                         Ticket ticket = parqueo.Aparcar(veh, fila, col, hora, min);
                         if (ticket != null) {
