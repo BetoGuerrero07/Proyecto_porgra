@@ -1,5 +1,6 @@
 package parqueo.inteligente;
 
+import interfaz.CapturadorSalida;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -21,8 +22,12 @@ public class Valet_Parking {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Random rnd = new Random();
+        CapturadorSalida capturador = new CapturadorSalida();
 
-        System.out.println("Bienvenido al Valet Parking");
+        capturador.agregarLinea("Bienvenido al Valet Parking");
+        capturador.mostrarEnPantalla();
+        capturador.limpiar();
+        
         System.out.print("Ingrese numero de filas: ");
         int filas = sc.nextInt();
         System.out.print("Ingrese numero de columnas: ");
@@ -34,12 +39,14 @@ public class Valet_Parking {
 
         int opcion;
         do {
-            System.out.println("\n--- MENU PARQUEO ---");
-            System.out.println("1. Estacionar vehiculo");
-            System.out.println("2. Retirar vehiculo");
-            System.out.println("3. Buscar vehiculo");
-            System.out.println("4. Mostrar parqueo graficado");
-            System.out.println("5. Salir");
+            capturador.agregarLinea("--- MENU PARQUEO ---");
+            capturador.agregarLinea("1. Estacionar vehiculo");
+            capturador.agregarLinea("2. Retirar vehiculo");
+            capturador.agregarLinea("3. Buscar vehiculo");
+            capturador.agregarLinea("4. Mostrar parqueo graficado");
+            capturador.agregarLinea("5. Salir");
+            capturador.mostrarEnPantalla();
+            capturador.limpiar();
             System.out.print("Elija opcion: ");
             opcion = sc.nextInt();
             sc.nextLine(); // limpiar scanner
@@ -48,9 +55,7 @@ public class Valet_Parking {
                 case 1:
                     System.out.print("Ingrese matricula del vehiculo: ");
                     String mat = sc.nextLine();
-                    //
                     Vehiculo veh = new Vehiculo(mat);
-                    //se reciben los datos del vehiculo
                     System.out.print("Ingrese fila para estacionar: ");
                     int fila = sc.nextInt();
                     System.out.print("Ingrese columna para estacionar: ");
@@ -60,20 +65,33 @@ public class Valet_Parking {
                     System.out.print("Minuto de entrada (0-59): ");
                     int min = sc.nextInt();
 
-                    Ticket ticket = parqueo.Aparcar(veh, fila, col, hora, min);
-
-                    if (ticket != null) {
-                        tickets.add(ticket);
-                        System.out.println("Vehiculo estacionado correctamente.");
-                        System.out.println("Ticket generado # " + ticket.getIdTicket());
-                        System.out.println("Ubicacion: fila " + (fila) + ", columna " + (col));
+                    String validacion = parqueo.ValidarPosicion(fila, col);
+                    if (validacion.length() > 0) {
+                        capturador.agregar(validacion);
+                        capturador.mostrarEnPantalla();
+                        capturador.limpiar();
+                    } else {
+                        Ticket ticket = parqueo.Aparcar(veh, fila, col, hora, min);
+                        if (ticket != null) {
+                            tickets.add(ticket);
+                            capturador.agregarLinea("Vehiculo estacionado correctamente.");
+                            capturador.agregarLinea("Ticket generado # " + ticket.getIdTicket());
+                            capturador.agregarLinea("Ubicacion: fila " + (fila) + ", columna " + (col));
+                            capturador.mostrarEnPantalla();
+                            capturador.limpiar();
+                        }
                     }
                     break;
 
                 case 2:
                     char seleccion;
                     do {
-                        System.out.println("Como desea retirar vehiculo? (1: matricula, 2: fila y columna)");
+                        capturador.agregarLinea("Como desea retirar vehiculo?");
+                        capturador.agregarLinea("1: matricula");
+                        capturador.agregarLinea("2: fila y columna");
+                        capturador.mostrarEnPantalla();
+                        capturador.limpiar();
+                        System.out.print("Seleccione: ");
                         seleccion = sc.nextLine().charAt(0);
 
                         Ticket ticketRetiro = null;
@@ -108,7 +126,9 @@ public class Valet_Parking {
                                 break;
 
                             default:
-                                System.out.println("Seleccione una opción válida");
+                                capturador.agregarLinea("Seleccione una opcion valida");
+                                capturador.mostrarEnPantalla();
+                                capturador.limpiar();
                         }
 
                         if (ticketRetiro != null) {
@@ -120,7 +140,9 @@ public class Valet_Parking {
                                 ms = sc.nextInt();
 
                                 if (!UtilidadesParqueo.horaValida(hs, ms) || !ticketRetiro.horaSalidaValida(hs, ms)) {
-                                    System.out.println("Hora de salida inválida. Debe ser posterior a la entrada.");
+                                    capturador.agregarLinea("Hora de salida invalida. Debe ser posterior a la entrada.");
+                                    capturador.mostrarEnPantalla();
+                                    capturador.limpiar();
                                 } else {
                                     break;
                                 }
@@ -128,15 +150,19 @@ public class Valet_Parking {
                             sc.nextLine(); // limpiar buffer
 
                             // Retirar vehículo y mostrar costo
-                            parqueo.Retirar(ticketRetiro, hs, ms);
+                            String mensajeRetiro = parqueo.RetirarConMensaje(ticketRetiro, hs, ms);
+                            capturador.agregar(mensajeRetiro);
 
                             int tiempo = ticketRetiro.calcularTiempoEstacionado();
-
                             int costo = UtilidadesParqueo.calcularCosto(tiempo);
-                            System.out.println("Costo a pagar: L." + costo);
+                            capturador.agregarLinea("Costo a pagar: L." + costo);
+                            capturador.mostrarEnPantalla();
+                            capturador.limpiar();
 
                         } else {
-                            System.out.println("Vehiculo no encontrado o ya retirado.");
+                            capturador.agregarLinea("Vehiculo no encontrado o ya retirado.");
+                            capturador.mostrarEnPantalla();
+                            capturador.limpiar();
                         }
 
                     } while (seleccion != '1' && seleccion != '2');
@@ -148,26 +174,35 @@ public class Valet_Parking {
                     boolean encontrado = false;
                     for (Ticket t : tickets) {
                         if (t.getVehiculo().getMatricula().equalsIgnoreCase(matriculaBuscar) && t.getVehiculo().getEstaEstacionado()) {
-                            System.out.println("Vehiculo encontrado en fila " + t.getFila() + ", columna " + t.getColumna());
+                            capturador.agregarLinea("Vehiculo encontrado en fila " + t.getFila() + ", columna " + t.getColumna());
                             encontrado = true;
                             break;
                         }
                     }
                     if (!encontrado) {
-                        System.out.println("Vehiculo no encontrado o ya retirado.");
+                        capturador.agregarLinea("Vehiculo no encontrado o ya retirado.");
                     }
+                    capturador.mostrarEnPantalla();
+                    capturador.limpiar();
                     break;
 
                 case 4:
-                    parqueo.ImprimirParqueo();
+                    String grafico = parqueo.ObtenerParqueoGrafico();
+                    capturador.agregar(grafico);
+                    capturador.mostrarEnPantalla();
+                    capturador.limpiar();
                     break;
 
                 case 5:
-                    System.out.println("Saliendo...");
+                    capturador.agregarLinea("Saliendo...");
+                    capturador.mostrarEnPantalla();
+                    capturador.limpiar();
                     break;
 
                 default:
-                    System.out.println("Opcion invalida.");
+                    capturador.agregarLinea("Opcion invalida.");
+                    capturador.mostrarEnPantalla();
+                    capturador.limpiar();
             }
 
         } while (opcion != 5);

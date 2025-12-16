@@ -74,6 +74,45 @@ public class Parqueo {
     }
 
     /**
+     * Obtiene la representacion grafica del parqueo como String.
+     * '#' indica espacio ocupado, ' ' espacio libre.
+     * @return String con el grafico del parqueo
+     */
+    public String ObtenerParqueoGrafico() {
+        String resultado = "";
+        resultado += "#: Espacio ocupado por vehiculo\n\n";
+
+        for (boolean[] fila : mapa) {
+            // linea superior de cada casilla
+            for (boolean area : fila) {
+                resultado += "=== ";
+            }
+            resultado += "\n";
+
+            // linea del medio
+            for (boolean area : fila) {
+                char simbolo;
+                if (area) {
+                    simbolo = '#';
+                } else {
+                    simbolo = ' ';
+                }
+                resultado += "|";
+                resultado += simbolo;
+                resultado += "| ";
+            }
+            resultado += "\n";
+
+            // linea inferior
+            for (boolean area : fila) {
+                resultado += "=== ";
+            }
+            resultado += "\n\n";
+        }
+        return resultado;
+    }
+
+    /**
      * Libera un espacio de parqueo y marca la salida del vehiculo.
      *
      * @param ticket Ticket del vehiculo a retirar.
@@ -98,6 +137,31 @@ public class Parqueo {
         mapa[fila][columna] = false;
         ticket.marcarSalida(horaSalida, minutoSalida);
         System.out.println("Tiempo estacionado: " + ticket.calcularTiempoEstacionado() + " minutos");
+    }
+
+    /**
+     * Libera un espacio de parqueo y retorna mensaje como String.
+     *
+     * @param ticket Ticket del vehiculo a retirar.
+     * @param horaSalida Hora de salida (0-23).
+     * @param minutoSalida Minuto de salida (0-59).
+     * @return Mensaje con el resultado del retiro
+     */
+    public String RetirarConMensaje(Ticket ticket, int horaSalida, int minutoSalida) {
+        int fila = ticket.getFila() - 1;
+        int columna = ticket.getColumna() - 1;
+
+        if (!mapa[fila][columna]) {
+            return "Error: el espacio no esta disponible\n";
+        }
+
+        if (!ticket.horaSalidaValida(horaSalida, minutoSalida)) {
+            return "Hora de salida invalida\n";
+        }
+
+        mapa[fila][columna] = false;
+        ticket.marcarSalida(horaSalida, minutoSalida);
+        return "Tiempo estacionado: " + ticket.calcularTiempoEstacionado() + " minutos\n";
     }
 
     /**
@@ -153,6 +217,52 @@ public class Parqueo {
     }
 
     /**
+     * Libera un espacio de parqueo indicando fila y columna, retorna mensaje.
+     *
+     * @param filaUsuario Fila del espacio.
+     * @param columnaUsuario Columna del espacio.
+     * @param horaSalida Hora de salida (0-23).
+     * @param minutoSalida Minuto de salida (0-59).
+     * @param tickets La lista de tickets registrados
+     * @return Mensaje con el resultado
+     */
+    public String RetirarPorPosicionConMensaje(int filaUsuario, int columnaUsuario, int horaSalida, int minutoSalida, ArrayList<Ticket> tickets) {
+        int fila = filaUsuario - 1;
+        int columna = columnaUsuario - 1;
+
+        if (fila < 0 || fila >= mapa.length || columna < 0 || columna >= mapa[0].length) {
+            return "Posicion invalida\n";
+        }
+
+        if (!mapa[fila][columna]) {
+            return "No hay vehiculo en esa posicion\n";
+        }
+
+        Ticket ticketEncontrado = null;
+        for (Ticket t : tickets) {
+            if (t.getFila() == filaUsuario && t.getColumna() == columnaUsuario && t.getVehiculo().getEstaEstacionado()) {
+                ticketEncontrado = t;
+                break;
+            }
+        }
+
+        if (ticketEncontrado == null) {
+            return "Ticket no encontrado\n";
+        }
+
+        if (!ticketEncontrado.horaSalidaValida(horaSalida, minutoSalida)) {
+            return "Hora de salida invalida\n";
+        }
+
+        mapa[fila][columna] = false;
+        ticketEncontrado.marcarSalida(horaSalida, minutoSalida);
+
+        String resultado = "Vehiculo retirado correctamente\n";
+        resultado += "Tiempo estacionado: " + ticketEncontrado.calcularTiempoEstacionado() + " minutos\n";
+        return resultado;
+    }
+
+    /**
      * Devuelve el numero de espacios libres en el parqueo.
      *
      * @return Numero de espacios libres.
@@ -194,5 +304,24 @@ public class Parqueo {
         mapa[fila][columna] = true;
         vehiculo.setEstaEstacionado(true);
         return new Ticket(filaUsuario, columnaUsuario, hora, minuto, vehiculo);
+    }
+
+    /**
+     * Valida una posicion en el parqueo.
+     * @param filaUsuario Fila seleccionada (base 1)
+     * @param columnaUsuario Columna seleccionada (base 1)
+     * @return Mensaje de error o cadena vacia si es valida
+     */
+    public String ValidarPosicion(int filaUsuario, int columnaUsuario) {
+        int fila = filaUsuario - 1;
+        int columna = columnaUsuario - 1;
+        
+        if (fila < 0 || fila >= mapa.length || columna < 0 || columna >= mapa[0].length) {
+            return "Posicion invalida\n";
+        }
+        if (mapa[fila][columna]) {
+            return "Espacio ocupado, elija otro\n";
+        }
+        return "";
     }
 }

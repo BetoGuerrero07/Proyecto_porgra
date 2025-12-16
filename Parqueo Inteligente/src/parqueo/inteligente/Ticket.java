@@ -127,4 +127,33 @@ public class Ticket {
     public int getIdTicket() {
         return idTicket;
     }
+
+    /**
+     * Obtiene la informacion del ticket como String
+     * @return String con la info del ticket
+     */
+    public String ObtenerInfo() {
+        String info = "";
+        info += "Ticket #" + idTicket + "\n";
+        info += "Matricula: " + vehiculo.getMatricula() + "\n";
+        info += "Ubicacion: fila " + fila + ", columna " + columna + "\n";
+        info += "Entrada: " + horaEntrada + ":";
+        if (minutoEntrada < 10) {
+            info += "0";
+        }
+        info += minutoEntrada + "\n";
+        
+        if (horaSalida != -1) {
+            info += "Salida: " + horaSalida + ":";
+            if (minutoSalida < 10) {
+                info += "0";
+            }
+            info += minutoSalida + "\n";
+            info += "Tiempo: " + calcularTiempoEstacionado() + " minutos\n";
+        } else {
+            info += "Aun estacionado\n";
+        }
+        
+        return info;
+    }
 }
