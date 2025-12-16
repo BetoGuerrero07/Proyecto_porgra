@@ -2,7 +2,6 @@ package parqueo.inteligente;
 
 import interfaz.CapturadorSalida;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -10,7 +9,7 @@ import java.util.Scanner;
  * Valet Parking. Permite estacionar, retirar, buscar ubicacion vehiculo y
  * mostrar el parqueo (espacios libres y ocupados).
  *
- * Autor: David Euceda, Alberto Guerrero, Jeremyah Mercado
+ * Autor: Alberto Guerrero
  */
 public class Valet_Parking {
 
@@ -21,7 +20,7 @@ public class Valet_Parking {
      */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Random rnd = new Random();
+        
         CapturadorSalida capturador = new CapturadorSalida();
 
         capturador.agregarLinea("Bienvenido al Valet Parking");
@@ -43,7 +42,7 @@ public class Valet_Parking {
             capturador.agregarLinea("1. Estacionar vehiculo");
             capturador.agregarLinea("2. Retirar vehiculo");
             capturador.agregarLinea("3. Buscar vehiculo");
-            capturador.agregarLinea("4. Mostrar parqueo graficado");
+            capturador.agregarLinea("4. Mostrar Parqueo Graficado");
             capturador.agregarLinea("5. Salir");
             capturador.mostrarEnPantalla();
             capturador.limpiar(); //limpiar para que el proximo contenido se muestre en pantalla separada

@@ -5,7 +5,7 @@
 package parqueo.inteligente;
 
 /**
- * Clase de utilidades para el parqueo con metodos estáticos.
+ * Clase de utilidades para el parqueo con metodos estaticos.
  * Contiene funciones de validacion y calculo de costos.
  * 
  * @author David Euceda

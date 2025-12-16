@@ -315,8 +315,8 @@ public class Parqueo {
 
     /**
      * Valida una posicion en el parqueo.
-     * @param filaUsuario Fila seleccionada (base 1)
-     * @param columnaUsuario Columna seleccionada (base 1)
+     * @param filaUsuario Fila seleccionada (indice comienza en 1)
+     * @param columnaUsuario Columna seleccionada  (indice comienza en 1)
      * @return Mensaje de error o cadena vacia si es valida
      */
     public String ValidarPosicion(int filaUsuario, int columnaUsuario) {

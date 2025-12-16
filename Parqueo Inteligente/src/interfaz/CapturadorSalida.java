@@ -10,6 +10,7 @@ package interfaz;
  * -Agregar contenido: capturador.agregarLinea("texto");
  * -Mostrar: capturador.mostrarEnPantalla();
  * -Limpiar: capturador.limpiar();
+ * @author Jeremiyah Mercado
  */
 public class CapturadorSalida {
     

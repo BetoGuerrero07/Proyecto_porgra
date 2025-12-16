@@ -1,10 +1,10 @@
 package parqueo.inteligente;
 
 /**
- * Representa un vehículo que puede ser estacionado en un parqueo.
- * Contiene matrícula y estado de estacionamiento(si esta estacionado o no).
+ * Representa un vehiculo que puede ser estacionado en un parqueo.
+ * Contiene matricula y estado de estacionamiento(si esta estacionado o no).
  * 
- * @author euced
+ * @author David Euceda
  */
 public class Vehiculo {
 
@@ -14,21 +14,21 @@ public class Vehiculo {
     /**
      * Constructor de vehículo.
      * 
-     * @param matricula Matrícula del vehículo.
+     * @param matricula Matricula del vehiculo.
      */
     public Vehiculo(String matricula) {
         this.matricula = matricula;
         this.estaEstacionado = false;
     }
 
-    /** @return Matricula del vehículo */
+    /** @return Matricula del vehiculo */
     public String getMatricula() { return matricula; }
 
-    /** @return true si el vehículo está estacionado, false si no */
+    /** @return true si el vehiculo esta estacionado, false si no */
     public boolean getEstaEstacionado() { return estaEstacionado; }
 
     /**
-     * Cambia el estado de estacionamiento del vehículo.
+     * Cambia el estado de estacionamiento del vehiculo.
      * 
      * @param estacionado true si se estaciona, false si se retira.
      */

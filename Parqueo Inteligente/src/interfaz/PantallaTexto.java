@@ -11,6 +11,7 @@ package interfaz;
  * - Ancho fijo de 50 caracteres
  * - Alto dinamico (se ajusta al contenido + margen)
  * - Ajuste automatico para graficos grandes
+ * @author Jeremiyah Mercado
  */
 public class PantallaTexto {
     

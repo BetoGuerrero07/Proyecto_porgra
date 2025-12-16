@@ -7,7 +7,7 @@ import java.util.Random;
  * de ubicacion (fila y columna), hora de entrada y salida, y el vehículo.
  * Genera un ID aleatorio único.
  *
- * @author euced
+ * @author David Euceda
  */
 public class Ticket {
 
